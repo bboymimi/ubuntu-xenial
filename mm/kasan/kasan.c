@@ -252,6 +252,50 @@ static __always_inline bool memory_is_poisoned(unsigned long addr, size_t size)
 	return memory_is_poisoned_n(addr, size);
 }
 
+#include <linux/fs.h>
+extern struct kmem_cache *filelock_cache;
+static __always_inline bool fl_check_lock(unsigned long addr, size_t size, bool write)
+{
+	struct page *page;
+	struct file_lock *fl;
+
+	if (system_state != SYSTEM_RUNNING)
+		return false;
+
+	if (!write)
+		return false;
+
+	page = virt_to_head_page((void *)addr);
+	if (unlikely(!PageSlab(page)))
+		return false;
+
+	if (!page->slab_cache)
+		return false;
+
+	if (unlikely(!filelock_cache)) {
+		if (strcmp(page->slab_cache->name, "file_lock_cache"))
+			return false;
+	} else {
+		if (page->slab_cache != filelock_cache)
+			return false;
+	}
+
+	fl = virt_to_obj(page->slab_cache, page, (const void *)addr);
+
+	if (addr == &fl->fl_block.next || addr == &fl->fl_block.prev)
+		return true;
+	if (addr == &fl->fl_list.next || addr == &fl->fl_list.prev)
+		return true;
+	return false;
+}
+
+static __always_inline void fl_hook(unsigned long addr, size_t size, bool write)
+{
+	if (!fl_check_lock(addr, size, write))
+		return;
+	pr_err("fl mem abuse!!!!!\n\n");
+	kasan_report(addr, size, write, _RET_IP_);
+}
 
 static __always_inline void check_memory_region(unsigned long addr,
 						size_t size, bool write)
@@ -264,6 +308,8 @@ static __always_inline void check_memory_region(unsigned long addr,
 		kasan_report(addr, size, write, _RET_IP_);
 		return;
 	}
+
+	fl_hook(addr, size, write);
 
 	if (likely(!memory_is_poisoned(addr, size)))
 		return;
