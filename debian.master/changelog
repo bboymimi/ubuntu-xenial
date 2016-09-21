@@ -1,3 +1,12 @@
+linux (4.4.0-21.37hf000000000v20160921b0h7fa5f3aa5006) xenial; urgency=medium
+
+  [ Gavin Guo ]
+
+  * HOTFIX: add kasan debug check
+    - ESCALATION: #000000000
+
+ -- Gavin Guo <gavin.guo@canonical.com>  Wed, 21 Sep 2016 09:53:11 +0800
+
 linux (4.4.0-21.37) xenial; urgency=low
 
   [ Tim Gardner ]
