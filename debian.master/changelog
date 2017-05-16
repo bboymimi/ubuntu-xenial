@@ -1,3 +1,12 @@
+linux (4.4.0-53.74hf00131414v20170516b0h7f3e9b67587b) xenial; urgency=medium
+
+  [ Gavin Guo ]
+
+  * HOTFIX: To use the spin_lock_irqsave to avoid the pcc_cpufreq_targe being interrupted
+    - ESCALATION: #00131414
+
+ -- Gavin Guo <gavin.guo@canonical.com>  Tue, 16 May 2017 12:11:08 +0800
+
 linux (4.4.0-53.74) xenial; urgency=low
 
   * CVE-2016-8655 (LP: #1646318)
