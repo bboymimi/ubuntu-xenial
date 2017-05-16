@@ -145,8 +145,9 @@ static unsigned int pcc_get_freq(unsigned int cpu)
 	u16 status;
 	u32 input_buffer;
 	u32 output_buffer;
+	unsigned long flags;
 
-	spin_lock(&pcc_lock);
+	spin_lock_irqsave(&pcc_lock, flags);
 
 	pr_debug("get: get_freq for CPU %d\n", cpu);
 	pcc_cpu_data = per_cpu_ptr(pcc_cpu_info, cpu);
@@ -185,12 +186,12 @@ static unsigned int pcc_get_freq(unsigned int cpu)
 			" capped at %d\n", cpu, curr_freq);
 	}
 
-	spin_unlock(&pcc_lock);
+	spin_unlock_irqrestore(&pcc_lock, flags);
 	return curr_freq;
 
 cmd_incomplete:
 	iowrite16(0, &pcch_hdr->status);
-	spin_unlock(&pcc_lock);
+	spin_unlock_irqrestore(&pcc_lock, flags);
 	return 0;
 }
 
