@@ -3384,11 +3384,6 @@ static int ext4_releasepage(struct page *page, gfp_t wait)
 
 	trace_ext4_releasepage(page);
 
-	if (PageDirty(page)) {
-		WARN_ON(1);
-		return 0;
-	}
-
 	/* Page has dirty journalled data -> cannot release */
 	if (PageChecked(page))
 		return 0;

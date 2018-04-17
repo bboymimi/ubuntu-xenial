@@ -1134,11 +1134,6 @@ static int bdev_try_to_free_page(struct super_block *sb, struct page *page,
 {
 	journal_t *journal = EXT4_SB(sb)->s_journal;
 
-	if (PageDirty(page)) {
-		WARN_ON(1);
-		return 0;
-	}
-
 	WARN_ON(PageChecked(page));
 	if (!page_has_buffers(page))
 		return 0;
