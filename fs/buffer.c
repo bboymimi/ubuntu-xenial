@@ -131,6 +131,7 @@ __clear_page_buffers(struct page *page)
 {
 	ClearPagePrivate(page);
 	set_page_private(page, 0);
+	set_track(&page->ppam.free_track, GFP_NOWAIT);
 	put_page(page);
 }
 

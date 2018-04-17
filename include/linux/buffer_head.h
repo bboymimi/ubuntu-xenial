@@ -14,6 +14,8 @@
 #include <linux/pagemap.h>
 #include <linux/wait.h>
 #include <linux/atomic.h>
+#include <linux/stackdepot.h>
+#include <linux/stacktrace.h>
 
 #ifdef CONFIG_BLOCK
 
@@ -134,13 +136,80 @@ BUFFER_FNS(Defer_Completion, defer_completion)
 
 #define bh_offset(bh)		((unsigned long)(bh)->b_data & ~PAGE_MASK)
 
+static inline void print_track(struct page_private_track *track, const char *prefix)
+{
+	pr_err("%s by task %u:\n", prefix, track->pid);
+	if (track->stack) {
+		struct stack_trace trace;
+
+		depot_fetch_stack(track->stack, &trace);
+		print_stack_trace(&trace, 0);
+	} else {
+		pr_err("(stack is not available)\n");
+	}
+}
+
 /* If we *know* page->private refers to buffer_heads */
 #define page_buffers(page)					\
 	({							\
-		BUG_ON(!PagePrivate(page));			\
+		if (!PagePrivate(page))	{			\
+			print_track(&page->ppam.alloc_track, "Allocated"); \
+			pr_err("\n");					   \
+			print_track(&page->ppam.free_track, "Freed");      \
+			pr_err("\n");					   \
+			BUG_ON(1);				\
+		}						\
 		((struct buffer_head *)page_private(page));	\
 	})
 #define page_has_buffers(page)	PagePrivate(page)
+
+static inline int in_irqentry_text(unsigned long ptr)
+{
+	return (ptr >= (unsigned long)&__irqentry_text_start &&
+		ptr < (unsigned long)&__irqentry_text_end) ||
+		(ptr >= (unsigned long)&__softirqentry_text_start &&
+		 ptr < (unsigned long)&__softirqentry_text_end);
+}
+
+static inline void filter_irq_stacks(struct stack_trace *trace)
+{
+	int i;
+
+	if (!trace->nr_entries)
+		return;
+	for (i = 0; i < trace->nr_entries; i++)
+		if (in_irqentry_text(trace->entries[i])) {
+			/* Include the irqentry function into the stack. */
+			trace->nr_entries = i + 1;
+			break;
+		}
+}
+
+#define PP_STACK_DEPTH 64
+static inline depot_stack_handle_t save_stack(gfp_t flags)
+{
+	unsigned long entries[PP_STACK_DEPTH];
+	struct stack_trace trace = {
+		.nr_entries = 0,
+		.entries = entries,
+		.max_entries = PP_STACK_DEPTH,
+		.skip = 0
+	};
+
+	save_stack_trace(&trace);
+	filter_irq_stacks(&trace);
+	if (trace.nr_entries != 0 &&
+	    trace.entries[trace.nr_entries-1] == ULONG_MAX)
+		trace.nr_entries--;
+
+	return depot_save_stack(&trace, flags);
+}
+
+static inline void set_track(struct page_private_track *track, gfp_t flags)
+{
+	track->pid = current->pid;
+	track->stack = save_stack(flags);
+}
 
 void buffer_check_dirty_writeback(struct page *page,
 				     bool *dirty, bool *writeback);
@@ -275,6 +344,7 @@ static inline void attach_page_buffers(struct page *page,
 {
 	get_page(page);
 	SetPagePrivate(page);
+	set_track(&page->ppam.alloc_track, GFP_KERNEL);
 	set_page_private(page, (unsigned long)head);
 }
 

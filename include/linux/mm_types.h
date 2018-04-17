@@ -14,6 +14,7 @@
 #include <linux/uprobes.h>
 #include <linux/page-flags-layout.h>
 #include <linux/workqueue.h>
+#include <linux/stackdepot.h>
 
 #include <asm/mmu.h>
 
@@ -25,6 +26,16 @@
 struct address_space;
 struct mem_cgroup;
 struct hmm;
+
+struct page_private_track {
+	u32 pid;
+	depot_stack_handle_t stack;
+};
+
+struct page_private_alloc_meta {
+	struct page_private_track alloc_track;
+	struct page_private_track free_track;
+};
 
 /*
  * Each physical page in the system has a struct page associated with
@@ -170,6 +181,8 @@ struct page {
 		};
 #endif
 	};
+
+	struct page_private_alloc_meta ppam;
 
 	/* Remainder is not double word aligned */
 	union {
