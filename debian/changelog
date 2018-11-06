@@ -1,12 +1,3 @@
-linux-hwe (4.15.0-38.41~16.04.1+hf203191v20181106b1h1bef30f73187) xenial; urgency=medium
-
-  [ Gavin Guo ]
-
-  * HOTFIX: xfrm: Fix NULL pointer dereference when skb_dst_force clears the dst_entry
-    - ESCALATION: #203191
-
- -- Gavin Guo <gavin.guo@canonical.com>  Tue, 06 Nov 2018 16:50:50 +0800
-
 linux-hwe (4.15.0-38.41~16.04.1) xenial; urgency=medium
 
   * linux-hwe: 4.15.0-38.41~16.04.1 -proposed tracker (LP: #1797076)
