@@ -644,7 +644,6 @@ cdc_mbim
 cdc_ncm
 cdc_subset
 cec
-cec-gpio
 ceph
 cfag12864b
 cfag12864bfb
@@ -976,6 +975,7 @@ dn_rtmsg
 dnet
 docg3
 docg4
+dp83640
 dp83822
 dp83848
 dp83867
