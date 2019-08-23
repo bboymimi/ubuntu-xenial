@@ -222,7 +222,7 @@ adummy
 adutux
 adv7170
 adv7175
-adv7511
+adv7511-v4l2
 adv7604
 adv7842
 adv_pci1710
@@ -644,7 +644,6 @@ cdc_mbim
 cdc_ncm
 cdc_subset
 cec
-cec-gpio
 ceph
 cfag12864b
 cfag12864bfb
@@ -2725,7 +2724,6 @@ n411
 n5pf
 n_gsm
 n_hdlc
-n_r3964
 n_tracerouter
 n_tracesink
 nand
