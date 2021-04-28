@@ -1,6 +1,6 @@
-linux-hwe (4.15.0-143.147~16.04.1) xenial; urgency=medium
+linux-hwe (4.15.0-143.147~16.04.2) xenial; urgency=medium
 
-  * xenial/linux-hwe: 4.15.0-143.147~16.04.1 -proposed tracker (LP: #1923810)
+  * xenial/linux-hwe: 4.15.0-143.147~16.04.2 -proposed tracker (LP: #1923810)
 
   [ Ubuntu: 4.15.0-143.147 ]
 
