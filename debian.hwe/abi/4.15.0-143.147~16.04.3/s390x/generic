@@ -3139,10 +3139,12 @@ EXPORT_SYMBOL vmlinux 0x00000000	hsiphash_1u32
 EXPORT_SYMBOL vmlinux 0x00000000	hsiphash_2u32
 EXPORT_SYMBOL vmlinux 0x00000000	hsiphash_3u32
 EXPORT_SYMBOL vmlinux 0x00000000	hsiphash_4u32
+EXPORT_SYMBOL vmlinux 0x00000000	icmp6_send
 EXPORT_SYMBOL vmlinux 0x00000000	icmp_err_convert
 EXPORT_SYMBOL vmlinux 0x00000000	icmp_global_allow
+EXPORT_SYMBOL vmlinux 0x00000000	icmp_ndo_send
 EXPORT_SYMBOL vmlinux 0x00000000	icmpv6_err_convert
-EXPORT_SYMBOL vmlinux 0x00000000	icmpv6_send
+EXPORT_SYMBOL vmlinux 0x00000000	icmpv6_ndo_send
 EXPORT_SYMBOL vmlinux 0x00000000	ida_destroy
 EXPORT_SYMBOL vmlinux 0x00000000	ida_get_new_above
 EXPORT_SYMBOL vmlinux 0x00000000	ida_pre_get
@@ -3195,10 +3197,8 @@ EXPORT_SYMBOL vmlinux 0x00000000	inet6_getname
 EXPORT_SYMBOL vmlinux 0x00000000	inet6_ioctl
 EXPORT_SYMBOL vmlinux 0x00000000	inet6_offloads
 EXPORT_SYMBOL vmlinux 0x00000000	inet6_protos
-EXPORT_SYMBOL vmlinux 0x00000000	inet6_register_icmp_sender
 EXPORT_SYMBOL vmlinux 0x00000000	inet6_register_protosw
 EXPORT_SYMBOL vmlinux 0x00000000	inet6_release
-EXPORT_SYMBOL vmlinux 0x00000000	inet6_unregister_icmp_sender
 EXPORT_SYMBOL vmlinux 0x00000000	inet6_unregister_protosw
 EXPORT_SYMBOL vmlinux 0x00000000	inet6addr_notifier_call_chain
 EXPORT_SYMBOL vmlinux 0x00000000	inet6addr_validator_notifier_call_chain
