@@ -9602,6 +9602,7 @@ EXPORT_SYMBOL_GPL vmlinux 0x00000000	md_rdev_init
 EXPORT_SYMBOL_GPL vmlinux 0x00000000	md_run
 EXPORT_SYMBOL_GPL vmlinux 0x00000000	md_stop
 EXPORT_SYMBOL_GPL vmlinux 0x00000000	md_stop_writes
+EXPORT_SYMBOL_GPL vmlinux 0x00000000	md_submit_discard_bio
 EXPORT_SYMBOL_GPL vmlinux 0x00000000	mddev_congested
 EXPORT_SYMBOL_GPL vmlinux 0x00000000	mddev_init
 EXPORT_SYMBOL_GPL vmlinux 0x00000000	mddev_init_writes_pending
